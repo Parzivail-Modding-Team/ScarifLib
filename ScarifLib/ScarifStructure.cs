@@ -1,12 +1,10 @@
-﻿using System;
+﻿using Brotli;
+using Substrate.Nbt;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using Brotli;
-using Substrate.Core;
-using Substrate.Nbt;
 
 namespace ScarifLib
 {
@@ -60,15 +58,16 @@ namespace ScarifLib
                 f.Write(ident);
                 f.Write(Version);
                 f.Write(BlockDiffMap.Keys.Count); // Keys = Chunks
-                f.Write((int)BlockTranslationMap.Keys.Count);
-                
+
                 TrimMappings();
+
+                f.Write(BlockTranslationMap.Keys.Count);
 
                 foreach (var pair in BlockTranslationMap)
                 {
-                    f.Write((short)pair.Key);
+                    f.Write(pair.Key);
 
-                    var buffer = Encoding.UTF8.GetBytes((string)pair.Value);
+                    var buffer = Encoding.UTF8.GetBytes(pair.Value);
                     f.Write(buffer);
                     f.Write((byte)0);
                 }
